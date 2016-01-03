@@ -8,6 +8,7 @@ var cookieParser    =   require('cookie-parser');
 var bodyParser      =   require('body-parser');
 var compress        =   require('compression');
 var methodOverride  =   require('method-override');
+var partials        =   require('express-partials')
 
 
 module.exports = function(app, config){
@@ -17,7 +18,8 @@ module.exports = function(app, config){
     
     
     app.set('views', config.root + '/app/views');
-    app.engine('html', require('ejs').renderFile);
+    app.set('view engine', 'ejs');
+    /*app.engine('html', require('ejs').renderFile);*/
     
     
     app.use(logger('dev'));
@@ -26,14 +28,14 @@ module.exports = function(app, config){
     app.use(cookieParser());
     app.use(compress());
     app.use(express.static(config.root + '/resources/public'));
-    console.log(config.root + '/resources/public');
+    app.use(partials());
     var controllers = glob.sync(config.root + '/app/controllers/*.js');
     controllers.forEach(function(controller){
         require(controller)(app);
     });
     
     app.get('/', function(req, res){
-        res.render('index.html',{
+        res.render('index.ejs',{
             title: "Home"
         });
     })
@@ -57,7 +59,7 @@ module.exports = function(app, config){
     
     app.use(function(err, req, res, next){
         res.status(err.status ||500);
-        res.render('error.html',{
+        res.render('error',{
             message: err.message,
             error: {},  
             title: 'error'
