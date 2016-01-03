@@ -22,9 +22,7 @@ module.exports = function(app, config){
     (config);
     
     app.set('views', config.root + '/app/views');
-    app.set('view engine', 'ejs');
-    /*app.engine('html', require('ejs').renderFile);*/
-    
+    app.set('view engine', 'ejs');    
     
     app.use(logger('dev'));
     app.use(bodyParser.json());
@@ -32,6 +30,7 @@ module.exports = function(app, config){
     app.use(cookieParser());
     app.use(compress());
     app.use(express.static(config.root + '/resources/public'));
+    app.use(favicon(config.root + '/resources/public/favicon.ico'));
     app.use(partials());
     
     app.use('/', router);
