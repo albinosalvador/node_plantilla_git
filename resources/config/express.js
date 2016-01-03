@@ -8,7 +8,10 @@ var cookieParser    =   require('cookie-parser');
 var bodyParser      =   require('body-parser');
 var compress        =   require('compression');
 var methodOverride  =   require('method-override');
-var partials        =   require('express-partials')
+var partials        =   require('express-partials');
+
+var router         =   require('../../app/routers/index')
+
 
 
 module.exports = function(app, config){
@@ -16,6 +19,7 @@ module.exports = function(app, config){
     app.locals.ENV = env;
     app.locals.ENV_DEVELOPMENT = env = 'development';
     
+    (config);
     
     app.set('views', config.root + '/app/views');
     app.set('view engine', 'ejs');
@@ -29,16 +33,9 @@ module.exports = function(app, config){
     app.use(compress());
     app.use(express.static(config.root + '/resources/public'));
     app.use(partials());
-    var controllers = glob.sync(config.root + '/app/controllers/*.js');
-    controllers.forEach(function(controller){
-        require(controller)(app);
-    });
     
-    app.get('/', function(req, res){
-        res.render('index.ejs',{
-            title: "Home"
-        });
-    })
+    app.use('/', router);
+ 
     
     app.use(function(req, res, next){
         var err = new Error('Not Found');
