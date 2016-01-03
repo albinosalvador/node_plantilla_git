@@ -20,7 +20,7 @@ module.exports = function (grunt) {
     stylus: {
       dist: {
         files: {
-          'resources/public/stylesheet/style.css': 'resources/public/stylesheet/stylus/**/*.styl'
+          'resources/public/stylesheet/style.css': 'resources/public/stylesheet/stylus/style.styl'
         }
       }
     },
